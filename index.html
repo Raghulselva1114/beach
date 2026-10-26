@@ -1,0 +1,915 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Marina Beach Plan 🌊</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800;900&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+
+<style>
+/* ═══════════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════════ */
+:root {
+  --bg-a:#FFD6EC; --bg-b:#E8D0FF; --bg-c:#D0ECFF;
+  --rose:#FF5FA0; --rose-deep:#D94084; --rose-light:#FFB3D4;
+  --violet:#9B6FE0; --violet-light:#C4A4FF;
+  --teal:#5FC4D4; --gold:#FFD166;
+  --fg:#2D1A40; --fg-muted:#8A6BA0; --fg-light:#BDA0CC;
+  --card:rgba(255,255,255,0.72);
+  --card-border:rgba(255,255,255,0.9);
+  --card-inner:rgba(255,255,255,0.5);
+  --input-bg:rgba(255,255,255,0.85);
+  --shadow-rose:rgba(255,95,160,0.25);
+  --shadow-violet:rgba(155,111,224,0.2);
+  --glow:rgba(255,95,160,0.15);
+  color-scheme: light;
+}
+@media (prefers-color-scheme:dark) { :root:not([data-theme="light"]) {
+  --bg-a:#1A0A28; --bg-b:#120820; --bg-c:#08101E;
+  --rose:#FF7AB8; --rose-deep:#FF5FA0; --rose-light:#FF4090;
+  --violet:#B490FF; --violet-light:#D4B8FF;
+  --fg:#FFE8F8; --fg-muted:#C090C8; --fg-light:#8060A0;
+  --card:rgba(32,12,48,0.82);
+  --card-border:rgba(180,100,220,0.25);
+  --card-inner:rgba(55,20,75,0.5);
+  --input-bg:rgba(42,16,60,0.9);
+  --shadow-rose:rgba(255,122,184,0.2);
+  --shadow-violet:rgba(180,144,255,0.18);
+  --glow:rgba(255,122,184,0.12);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"] {
+  --bg-a:#1A0A28; --bg-b:#120820; --bg-c:#08101E;
+  --rose:#FF7AB8; --rose-deep:#FF5FA0; --rose-light:#FF4090;
+  --violet:#B490FF; --violet-light:#D4B8FF;
+  --fg:#FFE8F8; --fg-muted:#C090C8; --fg-light:#8060A0;
+  --card:rgba(32,12,48,0.82);
+  --card-border:rgba(180,100,220,0.25);
+  --card-inner:rgba(55,20,75,0.5);
+  --input-bg:rgba(42,16,60,0.9);
+  --shadow-rose:rgba(255,122,184,0.2);
+  --shadow-violet:rgba(180,144,255,0.18);
+  --glow:rgba(255,122,184,0.12);
+  color-scheme:dark;
+}
+
+/* ═══════════════════════════════════════════════
+   BASE
+═══════════════════════════════════════════════ */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { height:100%; }
+body {
+  font-family:'Nunito',sans-serif;
+  color:var(--fg);
+  min-height:100%;
+  overflow:hidden;
+  background: var(--bg-b);
+}
+
+/* ═══════════════════════════════════════════════
+   ANIMATED GRADIENT BG
+═══════════════════════════════════════════════ */
+#bg-canvas {
+  position:fixed; inset:0; z-index:0;
+  background: linear-gradient(135deg, var(--bg-a), var(--bg-b), var(--bg-c));
+  background-size: 400% 400%;
+  animation: bgShift 12s ease-in-out infinite alternate;
+}
+@keyframes bgShift {
+  0%  { background-position: 0% 0%; }
+  33% { background-position: 100% 20%; }
+  66% { background-position: 60% 100%; }
+  100%{ background-position: 20% 60%; }
+}
+
+/* ═══════════════════════════════════════════════
+   BLOB SHAPES
+═══════════════════════════════════════════════ */
+.blob {
+  position:fixed; border-radius:50%; filter:blur(80px);
+  opacity:0.35; pointer-events:none; z-index:0;
+  animation: blobDrift ease-in-out infinite alternate;
+}
+.blob1 {
+  width:500px; height:500px;
+  top:-150px; left:-150px;
+  background: radial-gradient(circle, var(--rose-light), transparent 70%);
+  animation-duration: 14s;
+}
+.blob2 {
+  width:420px; height:420px;
+  bottom:-120px; right:-100px;
+  background: radial-gradient(circle, var(--violet-light), transparent 70%);
+  animation-duration: 17s; animation-delay: -6s;
+}
+.blob3 {
+  width:300px; height:300px;
+  top:40%; left:60%;
+  background: radial-gradient(circle, var(--teal), transparent 70%);
+  opacity:0.2; animation-duration: 11s; animation-delay: -3s;
+}
+@keyframes blobDrift {
+  from { transform: translate(0,0) scale(1); }
+  to   { transform: translate(40px,30px) scale(1.12); }
+}
+
+/* ═══════════════════════════════════════════════
+   AMBIENT PARTICLES
+═══════════════════════════════════════════════ */
+#ambient { position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden; }
+.amb {
+  position:absolute; opacity:0;
+  animation:floatUp linear infinite;
+  will-change:transform,opacity;
+}
+@keyframes floatUp {
+  0%   { opacity:0;    transform:translateY(110vh) rotate(-15deg) scale(.8); }
+  8%   { opacity:.18; }
+  92%  { opacity:.18; }
+  100% { opacity:0;    transform:translateY(-80px) rotate(20deg) scale(1.15); }
+}
+
+/* ═══════════════════════════════════════════════
+   OCEAN WAVE
+═══════════════════════════════════════════════ */
+#wave-wrap {
+  position:fixed; bottom:0; left:0; right:0;
+  z-index:1; pointer-events:none; overflow:hidden;
+  height:80px;
+}
+#wave-wrap svg { position:absolute; bottom:0; left:0; width:200%; height:100%; }
+#wave-wrap svg path { opacity:0.18; }
+.wave1 { animation:waveSway 7s linear infinite; }
+.wave2 { animation:waveSway 10s linear infinite reverse; opacity:0.12 !important; }
+@keyframes waveSway { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ═══════════════════════════════════════════════
+   PAGE WRAPPER
+═══════════════════════════════════════════════ */
+.page {
+  position:fixed; inset:0;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:flex-start;
+  padding:
+    max(24px,env(safe-area-inset-top,0px))
+    max(20px,env(safe-area-inset-right,0px))
+    max(90px,calc(env(safe-area-inset-bottom,0px) + 70px))
+    max(20px,env(safe-area-inset-left,0px));
+  z-index:10; overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+/* never let the card shrink (it has overflow:hidden, which would clip the
+   bottom button on short screens); margin:auto centers it when it fits and
+   lets the page scroll normally when it doesn't */
+.page > .card, .page > .final-wrap { flex-shrink:0; margin-block:auto; }
+.page.enter { animation:pgIn .55s cubic-bezier(0.22,1.2,0.36,1) both; }
+.page.leave { animation:pgOut .38s ease both; pointer-events:none; }
+@keyframes pgIn  {
+  from { opacity:0; transform:translateY(40px) scale(.94); filter:blur(6px); }
+  to   { opacity:1; transform:none; filter:blur(0); }
+}
+@keyframes pgOut {
+  from { opacity:1; transform:none; }
+  to   { opacity:0; transform:translateY(-24px) scale(.97); filter:blur(4px); }
+}
+
+/* ═══════════════════════════════════════════════
+   CARD — layered glass
+═══════════════════════════════════════════════ */
+.card {
+  position:relative;
+  width:100%; max-width:430px;
+  background:var(--card);
+  backdrop-filter:blur(40px) saturate(1.8) brightness(1.05);
+  -webkit-backdrop-filter:blur(40px) saturate(1.8) brightness(1.05);
+  border:1.5px solid var(--card-border);
+  border-radius:32px;
+  padding:2.2rem 1.9rem 2rem;
+  text-align:center;
+  box-shadow:
+    0 2px 0 rgba(255,255,255,0.7) inset,
+    0 32px 80px var(--shadow-rose),
+    0 8px 32px var(--shadow-violet),
+    0 1px 3px rgba(0,0,0,.06);
+  overflow:hidden;
+}
+/* top shine strip */
+.card::before {
+  content:'';
+  position:absolute; top:0; left:10%; right:10%; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.9),transparent);
+}
+/* inner glow */
+.card::after {
+  content:'';
+  position:absolute; inset:0; border-radius:32px; pointer-events:none;
+  background:radial-gradient(ellipse at 50% 0%, var(--glow) 0%, transparent 70%);
+}
+.card-inner-glow {
+  position:absolute; inset:0; border-radius:32px; pointer-events:none;
+  background:radial-gradient(circle at 80% 80%, rgba(155,111,224,0.06), transparent 60%);
+}
+
+/* ═══════════════════════════════════════════════
+   PROGRESS INDICATOR — pill style
+═══════════════════════════════════════════════ */
+.progress-wrap {
+  display:flex; align-items:center; gap:4px;
+  justify-content:center; margin-bottom:1.6rem;
+}
+.p-seg {
+  height:5px; border-radius:99px;
+  background:var(--fg-light); opacity:0.3;
+  transition:all .4s cubic-bezier(0.34,1.2,0.64,1);
+}
+.p-seg.done { opacity:0.55; width:14px !important; background:var(--rose); }
+.p-seg.active {
+  opacity:1; width:36px !important;
+  background:linear-gradient(90deg,var(--rose),var(--violet));
+  box-shadow:0 0 10px var(--rose);
+}
+
+/* ═══════════════════════════════════════════════
+   TYPE
+═══════════════════════════════════════════════ */
+.hed {
+  font-family:'Pacifico',cursive;
+  font-size:clamp(1.6rem,5.5vw,2.25rem);
+  line-height:1.22; margin-bottom:.5rem;
+  background:linear-gradient(135deg,var(--rose),var(--violet));
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-wrap:balance;
+  filter:drop-shadow(0 2px 8px var(--shadow-rose));
+}
+.sub {
+  color:var(--fg-muted); font-size:.95rem; font-weight:700;
+  margin-bottom:1.6rem; text-wrap:balance; line-height:1.6;
+}
+.badge {
+  display:inline-flex; align-items:center; gap:.35rem;
+  background:linear-gradient(135deg,rgba(255,95,160,.12),rgba(155,111,224,.1));
+  border:1px solid rgba(255,95,160,.22);
+  border-radius:50px; padding:.28rem .9rem;
+  font-size:.75rem; font-weight:800; color:var(--rose);
+  text-transform:uppercase; letter-spacing:.1em;
+  margin-bottom:1rem;
+}
+
+/* ═══════════════════════════════════════════════
+   EMOJI ICON
+═══════════════════════════════════════════════ */
+.ico-wrap {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:80px; height:80px; border-radius:50%;
+  background:linear-gradient(135deg,rgba(255,95,160,.15),rgba(155,111,224,.12));
+  border:2px solid rgba(255,95,160,.2);
+  margin-bottom:1rem;
+  animation:bop 2.8s ease-in-out infinite;
+  box-shadow:0 8px 30px var(--shadow-rose), 0 0 0 8px rgba(255,95,160,.06);
+}
+.ico { font-size:2.5rem; display:block; }
+@keyframes bop {
+  0%,100%{ transform:translateY(0) rotate(-2deg) scale(1); }
+  48%    { transform:translateY(-10px) rotate(2deg) scale(1.04); }
+}
+
+/* ═══════════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════════ */
+.btn {
+  font-family:'Nunito',sans-serif; font-weight:900;
+  font-size:1.02rem; padding:.88rem 2.2rem;
+  border-radius:50px; border:none; cursor:pointer;
+  display:inline-flex; align-items:center; gap:.4rem;
+  position:relative; overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .18s cubic-bezier(.34,1.4,.64,1), box-shadow .18s ease;
+}
+/* ripple on click */
+.btn::after {
+  content:''; position:absolute; inset:0; border-radius:50px;
+  background:rgba(255,255,255,0.28); opacity:0;
+  transition:opacity .3s;
+}
+.btn:active::after { opacity:1; }
+
+.btn-y {
+  background:linear-gradient(135deg,var(--rose) 0%,var(--violet) 100%);
+  color:#fff;
+  box-shadow:0 6px 24px var(--shadow-rose), 0 2px 6px rgba(0,0,0,.08),
+             0 1px 0 rgba(255,255,255,.3) inset;
+  letter-spacing:.02em;
+}
+.btn-y:hover {
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:0 14px 36px var(--shadow-rose), 0 4px 12px rgba(0,0,0,.1);
+}
+.btn-y:active { transform:translateY(0) scale(.98); }
+
+.btn-no {
+  background:var(--card-inner);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  color:var(--fg-muted); font-weight:800;
+  border:1.5px solid var(--card-border);
+  box-shadow:0 2px 12px rgba(0,0,0,.07);
+  position:absolute; z-index:5; white-space:nowrap;
+  transition:left .28s cubic-bezier(0.34,1.5,0.64,1), top .28s cubic-bezier(0.34,1.5,0.64,1);
+}
+.btn-no:hover { transform:translate(-50%,-50%) scale(1.06); }
+
+.btn-block { width:100%; justify-content:center; }
+.dodge-zone { position:relative; height:110px; width:100%; margin-top:.6rem; }
+
+/* ═══════════════════════════════════════════════
+   INPUTS — floating glass
+═══════════════════════════════════════════════ */
+.fields { display:flex; flex-direction:column; gap:1rem; margin-bottom:1.5rem; }
+.field-wrap { position:relative; }
+.f-label {
+  font-size:.75rem; font-weight:900; color:var(--fg-muted);
+  text-transform:uppercase; letter-spacing:.12em;
+  margin-bottom:.4rem; display:flex; align-items:center; gap:.3rem;
+}
+.f-input {
+  width:100%; padding:.9rem 1.15rem; border-radius:16px;
+  border:2px solid transparent;
+  background:var(--input-bg);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  color:var(--fg); font-family:'Nunito',sans-serif;
+  font-size:1rem; font-weight:700;
+  outline:none;
+  box-shadow:0 2px 12px rgba(0,0,0,.05), 0 0 0 2px rgba(255,95,160,.12);
+  transition:box-shadow .2s, border-color .2s, transform .15s;
+}
+.f-input:focus {
+  border-color:var(--rose);
+  box-shadow:0 2px 12px rgba(0,0,0,.05), 0 0 0 4px rgba(255,95,160,.18);
+  transform:translateY(-1px);
+}
+.f-input.err {
+  border-color:var(--rose-deep);
+  animation:shake .4s ease;
+}
+@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-7px)} 60%{transform:translateX(6px)} }
+
+/* ═══════════════════════════════════════════════
+   FOOD GRID
+═══════════════════════════════════════════════ */
+.food-grid {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:.7rem;
+  margin-bottom:1.4rem;
+}
+.food-grid > :nth-child(4) { grid-column:1; }
+.food-grid > :nth-child(5) { grid-column:2; }
+.f-card {
+  position:relative; overflow:hidden;
+  background:var(--card-inner);
+  border:2px solid rgba(255,95,160,.14);
+  border-radius:20px;
+  padding:1rem .4rem .85rem;
+  cursor:pointer; user-select:none; -webkit-user-select:none;
+  display:flex; flex-direction:column; align-items:center; gap:.4rem;
+  transition:all .28s cubic-bezier(0.34,1.3,0.64,1);
+  -webkit-tap-highlight-color:transparent;
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+}
+.f-card::before {
+  content:''; position:absolute; inset:0; border-radius:18px;
+  background:linear-gradient(135deg,var(--rose),var(--violet));
+  opacity:0; transition:opacity .28s;
+}
+.f-card:hover { transform:translateY(-4px) scale(1.04); box-shadow:0 10px 30px var(--shadow-rose); }
+.f-card.on {
+  border-color:var(--rose);
+  transform:translateY(-4px) scale(1.07);
+  box-shadow:0 12px 32px var(--shadow-rose), 0 0 0 3px rgba(255,95,160,.2);
+}
+.f-card.on::before { opacity:.12; }
+.f-ico { font-size:2.1rem; pointer-events:none; position:relative; z-index:1; }
+.f-name { font-size:.7rem; font-weight:900; color:var(--fg-muted); position:relative; z-index:1; letter-spacing:.04em; }
+.f-card.on .f-name { color:var(--rose); }
+/* sparkle on select */
+.f-card.on::after {
+  content:'✨'; position:absolute; top:2px; right:4px;
+  font-size:.6rem; animation:sparkPop .4s ease both;
+}
+@keyframes sparkPop { from{transform:scale(0) rotate(-30deg);opacity:0} to{transform:scale(1) rotate(10deg);opacity:1} }
+
+/* ═══════════════════════════════════════════════
+   PLAN BOX
+═══════════════════════════════════════════════ */
+.plan-box {
+  background:linear-gradient(135deg,rgba(255,95,160,.1),rgba(155,111,224,.08));
+  border:1.5px solid rgba(255,95,160,.25);
+  border-radius:20px; padding:1.2rem 1.4rem;
+  margin:1rem 0 1.3rem;
+  font-size:1rem; font-weight:700; color:var(--rose);
+  line-height:1.6; position:relative; overflow:hidden;
+}
+.plan-box::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,95,160,.5),transparent);
+}
+.plan-box .dt { font-size:1.08rem; font-weight:900; display:block; margin-top:.35rem; color:var(--violet); }
+
+/* ═══════════════════════════════════════════════
+   FINAL PAGE
+═══════════════════════════════════════════════ */
+.final-wrap {
+  width:100%; max-width:430px; text-align:center;
+  background:var(--card);
+  backdrop-filter:blur(40px) saturate(1.8);
+  -webkit-backdrop-filter:blur(40px) saturate(1.8);
+  border:1.5px solid var(--card-border);
+  border-radius:36px; padding:2.8rem 2rem 2.6rem;
+  box-shadow:
+    0 2px 0 rgba(255,255,255,0.6) inset,
+    0 40px 100px var(--shadow-rose),
+    0 12px 40px var(--shadow-violet);
+  position:relative; z-index:10; overflow:hidden;
+}
+.final-wrap::before {
+  content:''; position:absolute; top:0; left:10%; right:10%; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.9),transparent);
+}
+.final-msg {
+  font-family:'Pacifico',cursive;
+  font-size:clamp(1.2rem,4.8vw,1.6rem);
+  line-height:1.7; text-wrap:balance;
+  margin:1rem 0 1.3rem;
+  background:linear-gradient(135deg,var(--rose),var(--violet));
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* ═══════════════════════════════════════════════
+   HEART RAIN
+═══════════════════════════════════════════════ */
+#heartRain { position:fixed; inset:0; pointer-events:none; z-index:2; overflow:hidden; }
+.rh {
+  position:absolute; top:-80px;
+  animation:rainFall linear infinite;
+  will-change:transform,opacity;
+}
+@keyframes rainFall {
+  from { opacity:0; transform:translateY(0) rotate(-10deg); }
+  6%   { opacity:.9; }
+  94%  { opacity:.9; }
+  to   { opacity:0; transform:translateY(120vh) rotate(14deg); }
+}
+
+/* ═══════════════════════════════════════════════
+   CONFETTI
+═══════════════════════════════════════════════ */
+#confetti-layer { position:fixed; inset:0; pointer-events:none; z-index:15; overflow:hidden; }
+.cf {
+  position:absolute; border-radius:3px; opacity:0;
+  animation:cfFall linear both;
+}
+@keyframes cfFall {
+  0%   { opacity:0; transform:translateY(-20px) rotate(0deg); }
+  10%  { opacity:1; }
+  85%  { opacity:1; }
+  100% { opacity:0; transform:translateY(115vh) rotate(720deg); }
+}
+
+/* ═══════════════════════════════════════════════
+   PAGE 2 SURPRISE ANIM
+═══════════════════════════════════════════════ */
+@keyframes bounceIn {
+  0%  { transform:scale(.4) rotate(-10deg); opacity:0; }
+  60% { transform:scale(1.15) rotate(4deg); opacity:1; }
+  80% { transform:scale(.95) rotate(-2deg); }
+  100%{ transform:scale(1) rotate(0deg); }
+}
+.surprise-ico { animation:bounceIn .6s cubic-bezier(0.34,1.4,0.64,1) both; animation-delay:.15s; }
+
+/* ═══════════════════════════════════════════════
+   CHIP TAGS  (food vibes summary)
+═══════════════════════════════════════════════ */
+.chip {
+  display:inline-flex; align-items:center; gap:.25rem;
+  background:linear-gradient(135deg,rgba(255,95,160,.12),rgba(155,111,224,.1));
+  border:1px solid rgba(255,95,160,.25); border-radius:50px;
+  padding:.22rem .75rem; font-size:.78rem; font-weight:800;
+  color:var(--rose); margin:.2rem .15rem;
+}
+
+/* ═══════════════════════════════════════════════
+   MOTORCYCLE PULSE
+═══════════════════════════════════════════════ */
+.moto-row {
+  font-size:2rem; display:flex; align-items:center; gap:.2rem;
+  margin:.8rem 0; animation:motoPulse 1.8s ease-in-out infinite;
+}
+@keyframes motoPulse {
+  0%,100%{transform:translateX(0)} 50%{transform:translateX(6px)}
+}
+
+/* ═══════════════════════════════════════════════
+   REDUCED MOTION
+═══════════════════════════════════════════════ */
+@media (prefers-reduced-motion:reduce) {
+  *,*::before,*::after { animation:none!important; transition:none!important; }
+}
+</style>
+</head>
+<body>
+
+<div id="bg-canvas"></div>
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+
+<!-- Ocean Wave -->
+<div id="wave-wrap">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path class="wave1" d="M0 40 C240 80 480 0 720 40 C960 80 1200 0 1440 40 L1440 80 L0 80 Z" fill="#5FC4D4"/>
+    <path class="wave2" d="M0 50 C360 10 720 70 1080 30 C1260 10 1380 60 1440 50 L1440 80 L0 80 Z" fill="#9B6FE0"/>
+  </svg>
+</div>
+
+<div id="ambient"></div>
+<div id="confetti-layer"></div>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+const FOODS = [
+  { emoji:'🍕', name:'Pizza' },
+  { emoji:'🍔', name:'Burgers' },
+  { emoji:'🍝', name:'Pasta' },
+  { emoji:'🍰', name:'Sweets' },
+  { emoji:'🍦', name:'Ice Cream' },
+];
+
+/* ─── Progress Bar ─── */
+function Progress({ current, total = 6 }) {
+  return (
+    <div className="progress-wrap">
+      {Array.from({ length: total }, (_, i) => {
+        const n = i + 1;
+        return (
+          <div
+            key={i}
+            className={`p-seg ${n === current ? 'active' : n < current ? 'done' : ''}`}
+            style={{ width: n === current ? 36 : n < current ? 14 : 8 }}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+/* ─── Confetti burst ─── */
+function fireConfetti() {
+  const layer = document.getElementById('confetti-layer');
+  if (!layer) return;
+  const colors = ['#FF5FA0','#9B6FE0','#FFD166','#5FC4D4','#FF9EC6','#C4A4FF'];
+  for (let i = 0; i < 55; i++) {
+    const el = document.createElement('div');
+    el.className = 'cf';
+    const w = 6 + Math.random() * 10;
+    el.style.cssText = [
+      `left:${10 + Math.random() * 80}%`,
+      `width:${w}px`,
+      `height:${w * (0.5 + Math.random() * 1.2)}px`,
+      `background:${colors[Math.floor(Math.random() * colors.length)]}`,
+      `animation-duration:${1.8 + Math.random() * 2.4}s`,
+      `animation-delay:${Math.random() * .8}s`,
+      `border-radius:${Math.random() > .5 ? '50%' : '3px'}`,
+    ].join(';');
+    layer.appendChild(el);
+    el.addEventListener('animationend', () => el.remove());
+  }
+}
+
+/* ─── Page 1: Shall We? ─── */
+function Page1({ onNext, animClass }) {
+  const btnRef    = useRef(null);
+  const zoneRef   = useRef(null);
+  const lastDodge = useRef(0);
+
+  const dodgeFrom = useCallback((cx, cy) => {
+    const now = Date.now();
+    if (now - lastDodge.current < 35) return;
+    lastDodge.current = now;
+    const btn = btnRef.current, zone = zoneRef.current;
+    if (!btn || !zone) return;
+    const zr  = zone.getBoundingClientRect();
+    const br  = btn.getBoundingClientRect();
+    const bcx = br.left + br.width  / 2;
+    const bcy = br.top  + br.height / 2;
+    const dx  = bcx - cx, dy = bcy - cy;
+    if (Math.sqrt(dx*dx + dy*dy) > 130) return;
+    const angle  = Math.atan2(dy, dx);
+    const jitter = (Math.random() - .5) * .45;
+    let nx = (bcx - zr.left) + Math.cos(angle + jitter) * 165;
+    let ny = (bcy - zr.top)  + Math.sin(angle + jitter) * 135;
+    const hw = br.width/2 + 6, hh = br.height/2 + 6;
+    nx = Math.max(hw, Math.min(zr.width  - hw, nx));
+    ny = Math.max(hh, Math.min(zr.height - hh, ny));
+    btn.style.transform = 'translate(-50%,-50%)';
+    btn.style.left = nx + 'px';
+    btn.style.top  = ny + 'px';
+  }, []);
+
+  useEffect(() => {
+    const zone = zoneRef.current;
+    if (!zone) return;
+    const h = (e) => dodgeFrom(e.clientX, e.clientY);
+    zone.addEventListener('mousemove', h);
+    return () => zone.removeEventListener('mousemove', h);
+  }, [dodgeFrom]);
+
+  function handleYes() { fireConfetti(); onNext(); }
+
+  return (
+    <div className={`page ${animClass}`}>
+      <div className="card">
+        <div className="card-inner-glow" />
+        <Progress current={1} />
+        <div className="badge">🌊 Beach Invitation</div>
+        <div className="ico-wrap"><span className="ico">🌊</span></div>
+        <div className="hed">Hey Harini,<br/>Shall we go to Marina Beach? 🌊</div>
+        <div className="sub">A little adventure awaits us ✨<br />Just you, me & the waves 🌅</div>
+        <div style={{display:'flex',justifyContent:'center',marginBottom:'.3rem'}}>
+          <button className="btn btn-y" onClick={handleYes}>Yes! 🎉</button>
+        </div>
+        <div className="dodge-zone" ref={zoneRef}>
+          <button
+            className="btn btn-no"
+            ref={btnRef}
+            style={{left:'50%',top:'50%',transform:'translate(-50%,-50%)'}}
+            onMouseEnter={(e) => dodgeFrom(e.clientX, e.clientY)}
+            onTouchStart={(e) => { e.preventDefault(); const t=e.touches[0]; dodgeFrom(t.clientX,t.clientY); }}
+          >No 😅</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Page 2: You Said Yes! ─── */
+function Page2({ onNext, animClass }) {
+  return (
+    <div className={`page ${animClass}`}>
+      <div className="card">
+        <div className="card-inner-glow" />
+        <Progress current={2} />
+        <div className="badge">💥 Plot Twist!</div>
+        <div className="ico-wrap surprise-ico"><span className="ico">😱</span></div>
+        <div className="hed">Wait, you actually said yes!</div>
+        <div className="sub">
+          I was SO ready for you to say no 😭<br />
+          Now I have to actually plan this lol<br />
+          <span style={{fontSize:'.85rem',opacity:.75}}>okay okay okay okay okay okay—</span>
+        </div>
+        <button className="btn btn-y btn-block" onClick={onNext}>Okay, Okay! 😂</button>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Page 3: Date & Time ─── */
+function Page3({ onNext, animClass }) {
+  const dateRef = useRef(null), timeRef = useRef(null);
+
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0];
+    if (dateRef.current) { dateRef.current.min = today; dateRef.current.value = today; }
+    if (timeRef.current) { timeRef.current.value = '10:00'; }
+  }, []);
+
+  function shake(el) {
+    el.classList.add('err');
+    el.addEventListener('animationend', () => el.classList.remove('err'), { once:true });
+  }
+
+  function confirm() {
+    const d = dateRef.current, t = timeRef.current;
+    let ok = true;
+    if (!d.value) { shake(d); ok = false; }
+    if (!t.value) { shake(t); ok = false; }
+    if (!ok) return;
+    const dt   = new Date(d.value + 'T' + t.value);
+    const dStr = dt.toLocaleDateString('en-IN', {weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    const tStr = dt.toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit',hour12:true});
+    onNext(dStr + ' at ' + tStr);
+  }
+
+  return (
+    <div className={`page ${animClass}`}>
+      <div className="card">
+        <div className="card-inner-glow" />
+        <Progress current={3} />
+        <div className="badge">📅 Pick a Date</div>
+        <div className="ico-wrap"><span className="ico">📅</span></div>
+        <div className="hed">When Are We Free?</div>
+        <div className="sub">Lock it in so it actually happens! 🤝</div>
+        <div className="fields">
+          <div className="field-wrap">
+            <div className="f-label">📆 Date</div>
+            <input type="date" className="f-input" ref={dateRef} />
+          </div>
+          <div className="field-wrap">
+            <div className="f-label">⏰ Time</div>
+            <input type="time" className="f-input" ref={timeRef} />
+          </div>
+        </div>
+        <button className="btn btn-y btn-block" onClick={confirm}>Set the Date 💕</button>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Page 4: Food Vibes ─── */
+function Page4({ onNext, foods, setFoods, animClass }) {
+  function toggle(name) {
+    setFoods(prev => {
+      const n = new Set(prev);
+      n.has(name) ? n.delete(name) : n.add(name);
+      return n;
+    });
+  }
+
+  return (
+    <div className={`page ${animClass}`}>
+      <div className="card">
+        <div className="card-inner-glow" />
+        <Progress current={4} />
+        <div className="badge">🍽️ Food Vibes</div>
+        <div className="ico-wrap"><span className="ico">🍽️</span></div>
+        <div className="hed">What's Your Vibe?</div>
+        <div className="sub">Pick your faves — as many as you want! 🤤</div>
+        <div className="food-grid">
+          {FOODS.map(f => (
+            <div
+              key={f.name}
+              className={`f-card ${foods.has(f.name) ? 'on' : ''}`}
+              onClick={() => toggle(f.name)}
+            >
+              <span className="f-ico">{f.emoji}</span>
+              <span className="f-name">{f.name}</span>
+            </div>
+          ))}
+        </div>
+        <button className="btn btn-y btn-block" onClick={onNext}>Let's Go! 🎊</button>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Page 5: The Plan! ─── */
+function Page5({ onNext, dateTime, foods, animClass }) {
+  return (
+    <div className={`page ${animClass}`}>
+      <div className="card">
+        <div className="card-inner-glow" />
+        <Progress current={5} />
+        <div className="badge">✅ Plan Confirmed</div>
+        <div className="ico-wrap"><span className="ico">🥳</span></div>
+        <div className="hed">It's Officially On!</div>
+        <div className="sub">Glad you didn't say no 😤</div>
+
+        <div className="plan-box">
+          Be ready by
+          <span className="dt">{dateTime}</span>
+        </div>
+
+        {foods.size > 0 && (
+          <div style={{marginBottom:'1rem',lineHeight:'2'}}>
+            <div style={{fontSize:'.78rem',fontWeight:900,color:'var(--fg-muted)',textTransform:'uppercase',letterSpacing:'.1em',marginBottom:'.4rem'}}>
+              We're eating
+            </div>
+            {[...foods].map(f => {
+              const found = FOODS.find(x => x.name === f);
+              return <span key={f} className="chip">{found?.emoji} {f}</span>;
+            })}
+          </div>
+        )}
+
+        <div className="moto-row" style={{justifyContent:'center'}}>
+          <span>🏍️</span><span>💨</span><span style={{fontSize:'1rem',fontWeight:800,color:'var(--fg-muted)'}}>Coming to get you!</span>
+        </div>
+
+        <button className="btn btn-y btn-block" onClick={onNext} style={{marginTop:'.5rem'}}>
+          Okay, I Accept! 🤝
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Page 6: Final ─── */
+function Page6({ animClass }) {
+  const rainRef = useRef(null);
+
+  useEffect(() => {
+    const wrap = rainRef.current;
+    if (!wrap) return;
+    const glyphs = ['❤️','💕','💖','💗','💞','🌊','✨','🌸','💓','🫶','🐚','🌺'];
+    wrap.innerHTML = '';
+    for (let i = 0; i < 32; i++) {
+      const h = document.createElement('div');
+      h.className = 'rh';
+      h.textContent = glyphs[i % glyphs.length];
+      h.style.cssText = [
+        `left:${Math.random()*100}%`,
+        `font-size:${.8+Math.random()*1.6}rem`,
+        `animation-duration:${3.5+Math.random()*5}s`,
+        `animation-delay:${-Math.random()*9}s`,
+      ].join(';');
+      wrap.appendChild(h);
+    }
+    return () => { wrap.innerHTML = ''; };
+  }, []);
+
+  return (
+    <div className={`page ${animClass}`} style={{paddingBottom:'max(24px,env(safe-area-inset-bottom,0px))'}}>
+      <div id="heartRain" ref={rainRef} />
+      <div className="final-wrap">
+        <Progress current={6} />
+        <div style={{fontSize:'4.5rem',marginBottom:'.3rem',animation:'bop 1.5s ease-in-out infinite',display:'block'}}>❤️</div>
+        <div className="badge" style={{marginBottom:'1rem'}}>💌 A Message For You</div>
+        <div className="final-msg">
+          Hey Harini,<br />
+          plan cancel panna<br />
+          konnuduven! 😂❤️
+        </div>
+        <div style={{fontSize:'.9rem',fontWeight:700,color:'var(--fg-muted)',marginBottom:'1.1rem',lineHeight:1.7}}>
+          Marina Beach awaits us 🌊🌅<br />
+          <span style={{fontSize:'.8rem',opacity:.7}}>no take-backs now 😌</span>
+        </div>
+        <div style={{fontSize:'1.9rem',letterSpacing:'.15em',animation:'bop 2.3s ease-in-out infinite .4s'}}>
+          💕🌊🏍️🌊💕
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── App Root ─── */
+function App() {
+  const [page,    setPage]    = useState(1);
+  const [anim,    setAnim]    = useState('enter');
+  const [busy,    setBusy]    = useState(false);
+  const [dateTime,setDateTime]= useState('');
+  const [foods,   setFoods]   = useState(new Set());
+
+  /* ambient floaters */
+  useEffect(() => {
+    const wrap = document.getElementById('ambient');
+    if (!wrap || wrap.children.length > 0) return;
+    const chars = ['💕','🌊','✨','🌸','💖','⭐','🐚','🌺','💗','🫧','💫','🌙'];
+    for (let i = 0; i < 18; i++) {
+      const el = document.createElement('div');
+      el.className = 'amb';
+      el.textContent = chars[i % chars.length];
+      el.style.cssText = [
+        `left:${Math.random()*100}%`,
+        `font-size:${.8+Math.random()*1.4}rem`,
+        `animation-duration:${12+Math.random()*14}s`,
+        `animation-delay:${-Math.random()*22}s`,
+      ].join(';');
+      wrap.appendChild(el);
+    }
+  }, []);
+
+  function goTo(next, dt) {
+    if (busy) return;
+    if (dt) setDateTime(dt);
+    setBusy(true);
+    setAnim('leave');
+    setTimeout(() => { setPage(next); setAnim('enter'); setBusy(false); }, 400);
+  }
+
+  const sp = { animClass: anim };
+
+  return (
+    <>
+      {page===1 && <Page1 {...sp} onNext={() => goTo(2)} />}
+      {page===2 && <Page2 {...sp} onNext={() => goTo(3)} />}
+      {page===3 && <Page3 {...sp} onNext={(dt) => goTo(4, dt)} />}
+      {page===4 && <Page4 {...sp} onNext={() => goTo(5)} foods={foods} setFoods={setFoods} />}
+      {page===5 && <Page5 {...sp} onNext={() => goTo(6)} dateTime={dateTime} foods={foods} />}
+      {page===6 && <Page6 {...sp} />}
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
+
+</body></html>
